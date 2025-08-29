@@ -1,5 +1,6 @@
 package centre.ajial.webApi.configuration;
 
+import centre.ajial.webApi.filters.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,17 +25,23 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         return security
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        registry -> registry.anyRequest().authenticated()
+                        registry ->
+                                registry.requestMatchers("/login").permitAll()
+                                .anyRequest().authenticated()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 ).httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

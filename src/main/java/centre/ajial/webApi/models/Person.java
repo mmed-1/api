@@ -1,10 +1,7 @@
 package centre.ajial.webApi.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,12 +39,12 @@ public abstract class Person {
 
     @Column(columnDefinition = "TINYTEXT", nullable = false)
     @NotBlank(message = "Password is required!")
-    @Size(min = 8, max = 18)
+    @Size(min = 12)
     @Pattern(regexp = "^[^-=]+$", message = "Cannot contain '-' or '='")
     protected String password;
 
     @Temporal(TemporalType.DATE)
-    @NotBlank(message = "Birthday is required")
+    @NotNull(message = "Birthday is required")
     protected Date birthday;
 
     @Column(length = 20, nullable = false)

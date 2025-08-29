@@ -3,18 +3,23 @@ package centre.ajial.webApi.services;
 import centre.ajial.webApi.models.Student;
 import centre.ajial.webApi.repositories.PersonRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+
 
 @Service
 @AllArgsConstructor
 public class StudentService {
 
     private final PersonRepo repo;
+    private final JavaMailSender mailSender;
+
+    private void sendEmail(Student student) throws Exception {
+
+    }
 
     public ResponseEntity<?> saveStudent(Student student, BindingResult result) {
         //test the constraints
@@ -29,6 +34,7 @@ public class StudentService {
 
         student.setPassword(PersonRepo.ENCODER.encode(student.getPassword()));
         repo.save(student);
+
         return new ResponseEntity<>("created!", HttpStatus.OK);
     }
 }
