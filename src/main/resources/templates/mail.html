@@ -1,10 +1,289 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header h3 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            padding: 40px 30px;
+            background: white;
+        }
+
+        section p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .credentials-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .credentials-box:hover {
+            border-color: #000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin: 15px 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        li strong {
+            color: #000;
+            min-width: 80px;
+            font-weight: 600;
+        }
+
+        li span {
+            background: #000;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        li span:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: #000;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 1.1rem;
+        }
+
+        .copy-btn {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #333;
+            transform: scale(1.1);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copied {
+            background: #28a745 !important;
+        }
+
+        @media (max-width: 640px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            header {
+                padding: 30px 20px;
+            }
+            
+            header h2 {
+                font-size: 1.8rem;
+            }
+            
+            section {
+                padding: 30px 20px;
+            }
+            
+            li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            li span {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="email-container">
+        <header>
+            <h2>Welcome to our service 🎉</h2>
+            <h3 th:text="'Hello ' + ${person.firstName} + ' ' + ${person.lastName} + '!'">
+                Hello Firstname Lastname!
+            </h3>
+        </header>
 
+        <section>
+            <p>Your login information is:</p>
+            <div class="credentials-box">
+                <ul>
+                    <li>
+                        <strong>Email:</strong> 
+                        <span id="email" th:text="${person.email}">student@email.com</span>
+                        <button class="copy-btn" onclick="copyToClipboard('email')">Copy</button>
+                    </li>
+                    <li>
+                        <strong>Password:</strong> 
+                        <span id="password" th:text="${passwd}">******</span>
+                        <button class="copy-btn" onclick="copyToClipboard('password')">Copy</button>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>Thank you for joining us! 🚀</p>
+        </footer>
+    </div>
+
+    <script>
+        // Copy to clipboard functionality
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                // Visual feedback
+                const button = element.nextElementSibling;
+                const originalText = button.textContent;
+                
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        // Add smooth scroll and entrance animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.email-container');
+            
+            // Add stagger animation to list items
+            const listItems = document.querySelectorAll('li');
+            listItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.animation = `slideInLeft 0.6s ease-out ${index * 0.1 + 0.3}s forwards`;
+            });
+        });
+
+        // Additional animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInLeft {
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

@@ -6,9 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class StudentController {
@@ -21,6 +19,18 @@ public class StudentController {
 
     @PostMapping("/student/add")
     public ResponseEntity<?> save(@Valid @RequestBody Student student, BindingResult result) {
-        return service.saveStudent(student, result);
+        return service.save(student, result);
+    }
+
+    @DeleteMapping("/student/{id}/delete")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        return service.delete(id);
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<?> selectStudents(@RequestParam(defaultValue = "0") int page
+                , @RequestParam(defaultValue = "5") int size)
+    {
+        return service.getStudents(page, size);
     }
 }
