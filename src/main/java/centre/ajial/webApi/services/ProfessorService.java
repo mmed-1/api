@@ -3,6 +3,7 @@ package centre.ajial.webApi.services;
 import centre.ajial.webApi.mail.SendEmail;
 import centre.ajial.webApi.models.Person;
 import centre.ajial.webApi.models.Professor;
+import centre.ajial.webApi.models.Student;
 import centre.ajial.webApi.repositories.PersonRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -53,5 +54,17 @@ public class ProfessorService {
 
     public ResponseEntity<?> getProfessors(int page, int size) {
         return new ResponseEntity<>(repo.findAllProfessors(PageRequest.of(page, size)), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> update(Long id, Professor professor, BindingResult result) {
+        if(result.hasErrors())
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        Optional<Person> person = repo.findById(id);
+        if ((person.isEmpty()))
+            return new ResponseEntity<>("ID error", HttpStatus.BAD_REQUEST);
+        else if (!(person.get() instanceof Professor))
+            return new ResponseEntity<>("We can't do the update", HttpStatus.BAD_REQUEST);
+        repo.save(professor);
+        return new ResponseEntity<>("Updated!", HttpStatus.OK);
     }
 }

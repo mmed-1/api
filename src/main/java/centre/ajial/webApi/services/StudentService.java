@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.awt.print.Pageable;
 import java.util.Optional;
 
 
@@ -20,7 +19,7 @@ import java.util.Optional;
 public class StudentService {
 
     private final PersonRepo repo;
-    private SendEmail send;
+    private final SendEmail send;
 
     public ResponseEntity<?> save(Student student, BindingResult result) {
         //test the constraints
@@ -58,5 +57,17 @@ public class StudentService {
 
     public ResponseEntity<?> getStudents(int page, int size) {
         return new ResponseEntity<>(repo.findAllStudents(PageRequest.of(page, size)), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> update(Long id, Student student, BindingResult result) {
+        if(result.hasErrors())
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        Optional<Person> person = repo.findById(id);
+        if ((person.isEmpty()))
+            return new ResponseEntity<>("ID error", HttpStatus.BAD_REQUEST);
+        else if (!(person.get() instanceof Student))
+            return new ResponseEntity<>("We can't do the update", HttpStatus.BAD_REQUEST);
+        repo.save(student);
+        return new ResponseEntity<>("Updated!", HttpStatus.OK);
     }
 }

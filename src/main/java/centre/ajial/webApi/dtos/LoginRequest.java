@@ -14,7 +14,8 @@ public class LoginRequest {
     @Email(message = "Invalid email!")
     private String email;
 
-    //@Size(min = 12)
+    @Size(min = 12)
     @Pattern(regexp = "^[^-=]+$", message = "Cannot contain '-' or '='")
+    @NotBlank(message = "Password is required!")
     private String password;
 }

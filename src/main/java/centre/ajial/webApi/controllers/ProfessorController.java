@@ -3,7 +3,6 @@ package centre.ajial.webApi.controllers;
 import centre.ajial.webApi.models.Professor;
 import centre.ajial.webApi.services.ProfessorService;
 import jakarta.validation.Valid;
-import org.hibernate.query.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +32,10 @@ public class ProfessorController {
             @RequestParam(defaultValue = "5") int size
     ) {
         return service.getProfessors(page, size);
+    }
+
+    @PutMapping("/professor/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Professor professor, BindingResult rs) {
+        return service.update(id, professor, rs);
     }
 }

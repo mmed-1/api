@@ -3,7 +3,6 @@ package centre.ajial.webApi.controllers;
 import centre.ajial.webApi.models.Student;
 import centre.ajial.webApi.services.StudentService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +31,10 @@ public class StudentController {
                 , @RequestParam(defaultValue = "5") int size)
     {
         return service.getStudents(page, size);
+    }
+
+    @PutMapping("/student/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Student student, BindingResult result) {
+        return service.update(id, student, result);
     }
 }
