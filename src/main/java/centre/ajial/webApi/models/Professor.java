@@ -22,4 +22,11 @@ public class Professor extends Person {
             foreignKey = @ForeignKey(name = "admin_prof_fk")
     )
     private Admin admin;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "department_id",
+            foreignKey = @ForeignKey(name = "pr_dep_fk")
+    )
+    private Department department;
 }

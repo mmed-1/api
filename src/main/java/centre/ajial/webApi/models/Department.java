@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "departments")
 @Data @AllArgsConstructor @NoArgsConstructor
@@ -31,4 +33,7 @@ public class Department {
             foreignKey = @ForeignKey(name = "admin_dep_fk")
     )
     private Admin admin;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<Professor> professors;
 }
